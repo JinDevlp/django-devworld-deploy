@@ -1,0 +1,62 @@
+{% extends 'index.html' %} {% load static %} {% block content %}
+<section class="py-4 page-section bg-dark" id="services">
+  <div class="text-center">
+    <h2 class="text-center fw-bolder text-white mt-0">
+      Messages ({{unreadCount}})
+    </h2>
+    <hr class="divider text-white" />
+
+    {% if not messageRequests %}
+    <p class="lead fw-normal text-center text-white text-muted mb-5">
+      You have no messages
+    </p>
+    <a class="btn btn-outline-light btn-lg px-4" href="{% url 'profiles' %}"
+      >Home</a
+    >
+    {% endif %}
+  </div>
+  {% for message in messageRequests %}
+  <div class="container py-3 px-4 px-lg-5 my-3">
+    <a class="text-decoration-none" href="{% url 'message' message.id %}">
+      <div class="row gx-4 gx-lg-5 align-items-center">
+        <div class="col-md-3 text-center">
+          <img
+            class="rounded-circle mb-2"
+            style="
+              width: 50px;
+              height: 50px;
+              border-radius: 50%;
+              position: relative;
+              overflow: hidden;
+            "
+            src="{{message.sender.profile_image.url}}"
+          />
+          <h5 class="text-white">{{message.sender|title}}</h5>
+          {% if message.sender.job_field %}
+          <p class="text-white">{{message.sender.job_field|title}}</p>
+          {% endif %}
+        </div>
+        <div class="col-md-4 text-center">
+          <h4 class="text-white">{{message.name|title}}</h4>
+          <div class="fs-5 mb-3">
+            <span class="text-muted">{{message.body|title | slice:"100"}}</span>
+          </div>
+        </div>
+        <div class="col-md-2 text-center text-white">
+          <span class="text-muted">{{message.created}}</span>
+        </div>
+        <div class="col-md-2 text-center text-white">
+          {% if not message.is_read %}
+          <i class="fa-solid fa-envelope"></i>
+          {% else %}
+          <i class="fa-solid fa-check-double"></i>
+          {% endif %}
+        </div>
+      </div>
+      <hr class="divider text-white" />
+    </a>
+  </div>
+  {% endfor %}
+</section>
+
+{% endblock content %}

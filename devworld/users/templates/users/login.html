@@ -1,0 +1,106 @@
+{% extends 'index.html'%} {% load static %}
+<!-- das -->
+{% load bootstrap5 %} {% block content %}
+
+<div class="container-fluid ps-md-0">
+  <div class="row g-0">
+    <div class="d-none d-md-flex col-md-4 col-lg-6 bg-image">
+      <img
+        class="img-fluid rounded-3 my-5"
+        src="{% static 'images/login.png' %}"
+        alt="..."
+      />
+    </div>
+    <div class="col-md-8 col-lg-6">
+      <div class="login d-flex align-items-center py-5">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-9 col-lg-8 mx-auto">
+              {% if page == "login" %}
+              <h3 class="login-heading mb-4 text-white">Welcome back!</h3>
+
+              <!-- Sign In Form -->
+              <form action="{% url 'login' %}" method="POST">
+                {% csrf_token %}
+                <div class="form-floating mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="floatingInput"
+                    placeholder="username"
+                    name="username"
+                  />
+                  <label for="floatingInput">Username</label>
+                </div>
+                <div class="form-floating mb-3">
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="floatingPassword"
+                    placeholder="Password"
+                    name="password"
+                  />
+                  <label for="floatingPassword">Password</label>
+                </div>
+
+                <div class="d-grid">
+                  <input
+                    class="btn btn-lg rounded-pill btn-white border border-white btn-login text-uppercase fw-bold mb-2 text-white"
+                    type="submit"
+                    value="Login"
+                  />
+                </div>
+              </form>
+              <a
+                class="small text-decoration-none text-white"
+                href="{%url 'register'%}"
+              >
+                <div class="d-grid">
+                  <button
+                    class="btn btn-lg rounded-pill btn-login text-uppercase fw-bold mb-2 text-white"
+                  >
+                    Sign Up
+                  </button>
+                </div>
+              </a>
+
+              {% else %}
+              <h3 class="login-heading mb-4 text-white">Create Account</h3>
+
+              <!-- Sign Up Form -->
+              <form
+                class="text-white"
+                action="{% url 'register' %}"
+                method="POST"
+              >
+                {% csrf_token %} {% bootstrap_form form %}
+
+                <div class="d-grid mb-2">
+                  <input
+                    class="btn btn-lg rounded-pill border border-outline-white btn-dark btn-login text-uppercase fw-bold mb-2"
+                    type="submit"
+                    value="Confirm"
+                  />
+                </div>
+              </form>
+              <a
+                class="small text-decoration-none text-black"
+                href="{%url 'login'%}"
+              >
+                <div class="d-grid">
+                  <button
+                    class="btn btn-lg rounded-pill btn-white btn-login text-uppercase fw-bold mb-2 text-white"
+                  >
+                    Already have an Account?
+                  </button>
+                </div>
+              </a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

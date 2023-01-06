@@ -1,0 +1,50 @@
+{% extends 'index.html' %} {% load static %} {% load bootstrap5 %}
+<!-- message form -->
+{% block content %}
+<div class="container px-5 my-5 px-5">
+  <div class="container py-3 px-4 px-lg-5 my-3">
+    <div class="row gx-4 gx-lg-5 align-items-center">
+      <div class="col-md-3 text-center">
+        <a class="text-decoration-none" href="{% url 'profile' recipient.id%}">
+          <img
+            class="rounded-circle mb-2"
+            style="
+              width: 50px;
+              height: 50px;
+              border-radius: 50%;
+              position: relative;
+              overflow: hidden;
+            "
+            src="{{recipient.profile_image.url}}"
+          />
+          <h5 class="text-white">{{recipient.username|title}}</h5>
+          {% if message.sender.job_field %}
+          <p class="text-white">{{recipient.job_field|title}}</p>
+          {% endif %}
+        </a>
+      </div>
+    </div>
+  </div>
+  <hr class="divider text-white" />
+  <div class="text-center mb-3">
+    <h2 class="fw-bolder text-white">Message</h2>
+  </div>
+  <div class="row gx-5 justify-content-center">
+    <div class="col-lg-6">
+      <form class="text-white" method="POST" enctype="multipart/form-data">
+        {% csrf_token %} {% bootstrap_form form %}
+
+        <div class="d-grid">
+          <button
+            class="btn btn-primary btn-lg"
+            id="submitButton"
+            type="submit"
+          >
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock content %}

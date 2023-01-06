@@ -1,0 +1,184 @@
+{% extends 'index.html' %} {% load static %} {% load bootstrap5 %}
+{% block content %}
+<main class="flex-shrink-0">
+ <!-- Page content-->
+ <div class="container mt-3">
+  <div class="row">
+      <div class="col-lg-8">
+          <!-- Post content-->
+          <article>
+              <!-- Post header-->
+              <header class="mb-4 text-white">
+                  <!-- Post title-->
+                  <h1 class="fw-bolder mb-1">{{post.title|title}}</h1>
+                  <div class="badge bg-primary bg-gradient rounded-pill mb-2">
+                    {{post.category}}
+                  </div>
+                  <div class="text-muted fst-italic mb-2">{{post.created}}</div>
+                  <div class="text-muted fst-italic mb-2"><b>Post created by:</b> {{post.owner.username}}</div>
+                  {% if post.demo_link %}
+                  <a
+              class="social-icon text-decoration-none text-white"
+              href="{{post.demo_link}}"
+              >
+              <span class=" fst-italic mb-2">View Demo</span>
+              </a>
+                  {% endif %}
+                  <br>
+                  {% if post.source_link %}
+                  <a
+              class="social-icon text-decoration-none text-white"
+              href="{{post.source_link}}"
+              >
+                  <span class="fst-italic mb-2">View Code </span>
+                  </a>
+                  {% endif %}
+                  <div class="text-muted justify-content-sm-center fst-italic my-2">
+                    {% if request.user.profile.id in post.raters %}
+                    <span style="font-size:1rem;" class="badge rounded-pill bg-white text-dark">Voted</span>
+                    {% elif request.user.profile.id == post.owner.id %}
+                    <span style="font-size:1rem;" class="badge rounded-pill bg-white text-dark">It's Your Post</span>
+                    {% elif request.user.is_authenticated %}
+                    <form method="POST" action="{% url 'single-post' post.id %}">
+                      {% csrf_token %}{% for field in voting_form %}
+                      <div class="input-group mb-3">
+                        <div class="form_field">
+                        <span class="input-group-text bg-dark" id="basic-addon1"><i class="fa-solid fa-thumbs-up text-white fa-2xl"></i>
+                        </span>
+                        </div>
+                        {{ field }}
+                        <input class="btn btn-md btn-primary btn-login text-uppercase fw-bold mb-2" type="submit" value="vote" name="up">
+                    </div>
+                      {% endfor %}
+                    </form>
+                    {% else %}
+                    <a href="{% url 'login' %}?next={{request.path}}">Please log in</a>
+                    {% endif %}
+                      {% for rating in post.rating_set.all %}
+                        <span style="font-size:1rem;" class="badge rounded-pill bg-white text-dark">{{post.vote_ratio}}% ({{post.total_vote}})</span>
+                      {% endfor %}
+
+                  </div>
+                  <!-- Post meta content-->
+                  {% if post.owner.id == request.user.profile.id %}
+                  <div class="text-muted fst-italic mb-2">
+                    <a class="text-decoration-none justify-content-sm-center justify-content-xl-start" href="{% url 'edit-post' post.id %}">
+                      <i class="fa-regular fa-pen-to-square"></i> Edit Post
+                    </a>
+                    <a class="text-decoration-none" href="{% url 'delete-post' post.id %}">
+                      <i class="fa-regular fa-pen-to-square"></i> Delete Post
+                    </a>
+                  </div>
+                  {% endif %}
+
+
+              </header>
+              <!-- Preview image figure-->
+              <figure class="mb-4" style="height:400px;">
+                <a class="text-decoration-none" href="{{post.featured_image.url}}">
+                  <img class="img-fluid" style="height:400px;" src="{{post.featured_image.url}}" alt="..." />
+                </a>
+              </figure>
+              <!-- Post content-->
+              <section class="mb-5 text-white">
+                  <p class="fs-5 mb-4">{{post.description}}</p>
+              </section>
+          </article>
+      </div>
+      <!-- Side widgets-->
+      <div class="col-lg-4">
+        <div class="card mb-4">
+          <div class="card-header">Author</div>
+          <div class="card-body text-center">
+            <div class="mt-3">
+              <div class="mb-2">
+              <a
+                href="{% url 'profile' post.owner.id %}"
+                class="text-decoration-none text-black"
+              >
+              <img
+                class="rounded-circle"
+                style="
+                  width: 150px;
+                  height: 150px;
+                  border-radius: 50%;
+                  position: relative;
+                  overflow: hidden;
+                "
+                src="{{post.owner.profile_image.url}}"
+                alt="..."
+              />
+            </div>
+            <h3 class="h4 mb-2">{{post.owner.username|title}}</h3>
+            <p class="mb-0">{{post.owner.job_field|title}}</p>
+          </a>
+            {% for tech in post.owner.technology_set.all|slice:"5"%}
+            <span class="badge rounded-pill bg-dark">{{tech|title}}</span>
+            {% endfor %}
+          </div>
+      </div>
+      </div>
+
+      <!-- Comments -->
+                    <div class="card mb-4">
+                      <div class="card bg-light">
+                        <div class="card-body">
+                            <!-- Comment form-->
+                            {% if request.user.is_authenticated %}
+                            <form method="POST" enctype="multipart/form-data" >
+                {% csrf_token %} {% bootstrap_form comment_form %}
+                <div class="d-grid">
+                  <button
+                    class="btn btn-lg btn-primary btn-login text-uppercase fw-bold mb-2"
+                    type="submit"
+                    value="comment"
+                    name="comment">
+                    Comment
+                  </button>
+                </div>
+              </form>
+              {% else %}
+              <h5>Can't comment before logging in</h5>
+                <div class="d-grid">
+                  <a href="{% url 'login' %}?next={{request.path}}"><button
+                    class="btn btn-lg btn-primary btn-login text-uppercase fw-bold mb-2"
+                    type="submit"
+                    value="Login"
+                    name="Login">
+                    Login
+                  </button></a>
+                </div>
+
+
+              {% endif %}
+                            <!-- Comment with nested comments-->
+                            {%for comment in comments%}
+                           <div class="d-flex mb-4 text-white">
+
+                             <a href="{% url 'profile' comment.commenter.pk%}" class="text-decoration-none text-black">
+                               <div class="d-flex">
+                               <div  class="flex-shrink-0"><img style="
+                                  width: 50px;
+                                  height: 50px;
+                                  border-radius: 50%;
+                                  position: relative;
+                                  overflow: hidden;
+                                " class="rounded-circle" src="{{comment.commenter.profile_image.url}}" alt="..." /></div>
+                                 <div class="ms-3">
+                                     <div class="fw-bold">{{comment.commenter|title}}</div>
+                                     {{comment.content|slice:"100"}}
+                                 </div>
+                                </div>
+                                 </a>
+
+                            </div>
+                            {% endfor %}
+                            <!-- Single comment-->
+                        </div>
+                    </div>
+                    </div>
+      </div>
+  </div>
+  </div>
+</main>
+{% endblock content %}
