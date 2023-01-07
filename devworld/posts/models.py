@@ -14,7 +14,7 @@ class Post(models.Model):
     owner = models.ForeignKey(Profile, null=True, blank=True, on_delete=models.CASCADE)
     title = models.CharField(max_length=100, blank=True, null=True )
     description = models.TextField(null=True, blank=True)
-    featured_image = models.ImageField(null=True,upload_to='posts/', blank=True, default="post_default.jpg")
+    featured_image = models.ImageField(null=True, blank=True, upload_to='posts/', default="post_default.jpg")
     category = models.CharField(
         max_length=10,
         choices=CATEGORY,

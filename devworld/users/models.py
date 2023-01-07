@@ -29,7 +29,7 @@ class Profile(models.Model):
     social_github = models.CharField(max_length=200, blank=True, null=True)
     social_website = models.CharField(max_length=200, blank=True, null=True)
     social_linkedin = models.CharField(max_length=200, blank=True, null=True)
-    profile_image = models.ImageField(null=True, blank=True, upload_to='profiles/', default='default_user.jpeg')
+    profile_image = models.ImageField(null=True, blank=True, upload_to='profiles/', default='profiles/default_user.jpeg')
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

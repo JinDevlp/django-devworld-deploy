@@ -9,3 +9,7 @@ django-bootstrap-v5
 django-environ
 fontawesomefree
 psycopg2-binary
+zappa
+django-cors-headers
+django-s3-storage
+django-storages
