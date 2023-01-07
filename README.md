@@ -24,7 +24,7 @@
 ![Bootstrap](https://img.shields.io/static/v1?style=for-the-badge&message=Bootstrap&color=7952B3&logo=Bootstrap&logoColor=FFFFFF&label=)
 ---
 # Home Page
-![image](https://drive.google.com/uc?export=view&id=1qV5zlMqM86kErsqmAOkGDDx1Zb7t5D5o)
+![image](https://drive.google.com/uc?export=view&id=1qV5zlMqM86kErsqmAOkGDDx1Zb7t5D5o | width=100)
 
 # Profile Page
 <img src="./staticfiles/images/Screenshot 2022-12-06 at 3.40.38 PM.png">
